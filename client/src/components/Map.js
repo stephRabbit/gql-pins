@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/DeleteTwoTone'
 
 import { MAP_BOX } from '../keys'
 import Context from '../context'
+import Blog from './Blog'
 import PinIcon from './PinIcon'
 
 const INIT_VIEWPORT = {
@@ -83,6 +84,7 @@ const Map = ({ classes }) => {
           </Marker>
         )}
       </ReactMapGL>
+      <Blog />
     </div>
   )
 }
