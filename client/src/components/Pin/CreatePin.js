@@ -10,14 +10,17 @@ import ClearIcon from '@material-ui/icons/Clear'
 import SaveIcon from '@material-ui/icons/SaveTwoTone'
 
 import { CLDRY_NAME, CLDRY_URL } from '../../keys'
+import { CREATE_PIN_MUTATION } from '../../graphql/mutations'
+import { useClient } from '../Auth/client'
 import Context from '../../context'
 
 const CreatePin = ({ classes }) => {
+  const client = useClient()
+  const { state, dispatch } = useContext(Context)
   const [title, setTitle] = useState('')
   const [image, setImage] = useState('')
   const [content, setContent] = useState('')
-
-  const { dispatch } = useContext(Context)
+  const [submitting, setSubmitting] = useState(false)
 
   const handleClearState = () => {
     setTitle('')
@@ -25,7 +28,7 @@ const CreatePin = ({ classes }) => {
     setContent('')
   }
 
-  const handleDeleteDraft = e => {
+  const handleDeleteDraft = () => {
     handleClearState()
     dispatch({ type: 'DELETE_DRAFT' })
   }
@@ -41,14 +44,26 @@ const CreatePin = ({ classes }) => {
     return res.data.url
   }
 
-  const onSubmit = async e => {
-    e.preventDefault()
-    const url = await handleImageUpload()
-    console.log({ title, image, url, content })
+  const handleSubmit = async e => {
+    try {
+      e.preventDefault()
+      setSubmitting(true)
+      const url = await handleImageUpload()
+      const { latitude, longitude } = state.draft
+      const variables = { title, image: url, content, latitude, longitude }
+      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables)
+      dispatch({ type: 'CREATE_PIN', payload: createPin })
+      handleDeleteDraft()
+    } catch (err) {
+      setSubmitting(false)
+      console.error('Error creating pin', err)
+    }
   }
 
+  const disableBtn = !title.trim() || !content.trim() || !image || submitting
+
   return (
-    <form className={classes.form} onSubmit={onSubmit}>
+    <form className={classes.form} onSubmit={handleSubmit}>
       <Typography
         className={classes.alignCenter}
         component='h2'
@@ -104,7 +119,7 @@ const CreatePin = ({ classes }) => {
           Discard
         </Button>
         <Button
-          disabled={!title.trim() || !content.trim() || !image}
+          disabled={disableBtn}
           className={classes.button}
           variant='contained'
           color='secondary'

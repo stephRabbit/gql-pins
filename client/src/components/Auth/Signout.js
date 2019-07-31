@@ -32,14 +32,16 @@ const Signout = ({ classes }) => {
 const styles = {
   root: {
     cursor: 'pointer',
-    display: 'flex'
+    display: 'flex',
+    borderRadius: '3px'
   },
   buttonText: {
-    color: 'orange'
+    color: 'orchid',
+    fontWeight: 450
   },
   buttonIcon: {
     marginLeft: '5px',
-    color: 'orange'
+    color: 'orchid'
   }
 }
 

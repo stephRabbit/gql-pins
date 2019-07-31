@@ -5,10 +5,10 @@ import { Paper } from '@material-ui/core'
 import Context from '../context'
 import CreatePin from './Pin/CreatePin'
 import NoContent from './Pin/NoContent'
-import PinContent from './Pin/PinContent'
+// import PinContent from './Pin/PinContent'
 
 const Blog = ({ classes }) => {
-  const { state, dispatch } = useContext(Context)
+  const { state } = useContext(Context)
   const { draft } = state
 
   let BlogContent

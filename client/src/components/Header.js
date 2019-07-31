@@ -17,7 +17,12 @@ const Header = ({ classes }) => {
         <Toolbar>
           <div className={classes.grow}>
             <MapIcon className={classes.icon} />
-            <Typography component='h1' variant='h6' color='inherit' noWrap>
+            <Typography
+              className={classes.textColor}
+              component='h1'
+              variant='h6'
+              color='inherit'
+              noWrap>
               MapPins
             </Typography>
           </div>
@@ -28,7 +33,11 @@ const Header = ({ classes }) => {
                 src={currentUser.picture}
                 alt={currentUser.name}
               />
-              <Typography variant='h5' color='inherit' noWrap>
+              <Typography
+                variant='h6'
+                component='h3'
+                className={classes.textColor}
+                noWrap>
                 {currentUser.name}
               </Typography>
             </div>
@@ -51,16 +60,20 @@ const styles = theme => ({
   },
   icon: {
     marginRight: theme.spacing.unit,
-    color: 'orange',
+    color: 'orchid',
     fontSize: 45
   },
   mobile: {
     display: 'none'
   },
   picture: {
-    height: '50px',
+    height: '37px',
     borderRadius: '90%',
-    marginRight: theme.spacing.unit * 2
+    marginRight: theme.spacing.unit
+  },
+  textColor: {
+    color: 'whitesmoke',
+    fontWeight: 400
   }
 })
 
