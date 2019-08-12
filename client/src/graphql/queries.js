@@ -14,6 +14,7 @@ export const GET_PINS_QUERY = `
     getPins {
       _id
       createdAt
+      content
       image
       latitude
       longitude
