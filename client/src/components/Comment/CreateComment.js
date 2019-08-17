@@ -1,13 +1,74 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import { withStyles } from '@material-ui/core'
-// import InputBase from "@material-ui/core/InputBase";
-// import IconButton from "@material-ui/core/IconButton";
-// import ClearIcon from "@material-ui/icons/Clear";
-// import SendIcon from "@material-ui/icons/Send";
-// import Divider from "@material-ui/core/Divider";
+import InputBase from '@material-ui/core/InputBase'
+import IconButton from '@material-ui/core/IconButton'
+import ClearIcon from '@material-ui/icons/Clear'
+import SendIcon from '@material-ui/icons/Send'
+import Divider from '@material-ui/core/Divider'
+
+import { CREATE_COMMENT_MUTATION } from '../../graphql/mutations'
+import { useClient } from '../Auth/client'
+import Context from '../../context'
 
 const CreateComment = ({ classes }) => {
-  return <div>CreateComment</div>
+  const client = useClient()
+  const { state, dispatch } = useContext(Context)
+  const [comment, setComment] = useState('')
+
+  const setCommentText = e => {
+    setComment(e.target.value)
+  }
+
+  const clearCommentText = e => {
+    setComment('')
+  }
+
+  const submitComment = async e => {
+    try {
+      const variables = {
+        pinId: state.currentPin._id,
+        text: comment
+      }
+      const { createComment } = await client.request(
+        CREATE_COMMENT_MUTATION,
+        variables
+      )
+      dispatch({
+        type: 'CREATE_COMMENT',
+        payload: createComment
+      })
+      setComment('')
+    } catch (err) {
+      console.error('Create comment error', err.message)
+    }
+  }
+
+  return (
+    <>
+      <form className={classes.form}>
+        <IconButton
+          onClick={clearCommentText}
+          disabled={!comment.trim()}
+          className={classes.clearButton}>
+          <ClearIcon />
+        </IconButton>
+        <InputBase
+          className={classes.input}
+          placeholder='Add Comment'
+          multiline={true}
+          value={comment}
+          onChange={setCommentText}
+        />
+        <IconButton
+          onClick={submitComment}
+          disabled={!comment.trim()}
+          className={classes.sendButton}>
+          <SendIcon />
+        </IconButton>
+      </form>
+      <Divider />
+    </>
+  )
 }
 
 const styles = theme => ({

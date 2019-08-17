@@ -6,17 +6,12 @@ import FaceIcon from '@material-ui/icons/Face'
 import format from 'date-fns/format'
 
 import Context from '../../context'
+import Comments from '../Comment/Comments'
+import CreateComment from '../Comment/CreateComment'
 
 const PinContent = ({ classes }) => {
   const { state } = useContext(Context)
-  const {
-    createdAt,
-    title,
-    content,
-    image,
-    author,
-    comments
-  } = state.currentPin
+  const { createdAt, title, content, author, comments } = state.currentPin
   return (
     <div className={classes.root}>
       <Typography component='h2' variant='h4' color='primary' gutterBottom>
@@ -41,6 +36,8 @@ const PinContent = ({ classes }) => {
       <Typography variant='subtitle1' gutterBottom>
         {content}
       </Typography>
+      <CreateComment />
+      <Comments comments={comments} />
     </div>
   )
 }
