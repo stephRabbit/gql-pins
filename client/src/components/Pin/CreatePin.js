@@ -8,6 +8,7 @@ import AddAPhotoIcon from '@material-ui/icons/AddAPhotoTwoTone'
 import LandscapeIcon from '@material-ui/icons/LandscapeOutlined'
 import ClearIcon from '@material-ui/icons/Clear'
 import SaveIcon from '@material-ui/icons/SaveTwoTone'
+import { unstable_useMediaQuery as useMediaQuery } from '@material-ui/core/useMediaQuery'
 
 import { CLDRY_NAME, CLDRY_URL } from '../../keys'
 import { CREATE_PIN_MUTATION } from '../../graphql/mutations'
@@ -17,6 +18,7 @@ import Context from '../../context'
 const CreatePin = ({ classes }) => {
   const client = useClient()
   const { state, dispatch } = useContext(Context)
+  const mobileSize = useMediaQuery('(max-width: 650px)')
   const [title, setTitle] = useState('')
   const [image, setImage] = useState('')
   const [content, setContent] = useState('')
@@ -51,8 +53,7 @@ const CreatePin = ({ classes }) => {
       const url = await handleImageUpload()
       const { latitude, longitude } = state.draft
       const variables = { title, image: url, content, latitude, longitude }
-      const { createPin } = await client.request(CREATE_PIN_MUTATION, variables)
-      dispatch({ type: 'CREATE_PIN', payload: createPin })
+      await client.request(CREATE_PIN_MUTATION, variables)
       handleDeleteDraft()
     } catch (err) {
       setSubmitting(false)
@@ -100,7 +101,7 @@ const CreatePin = ({ classes }) => {
         <TextField
           name='content'
           label='Content'
-          rows='6'
+          rows={mobileSize ? '3' : '6'}
           margin='normal'
           variant='outlined'
           multiline

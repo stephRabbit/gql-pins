@@ -12,7 +12,7 @@ import Context from '../../context'
 
 const CreateComment = ({ classes }) => {
   const client = useClient()
-  const { state, dispatch } = useContext(Context)
+  const { state } = useContext(Context)
   const [comment, setComment] = useState('')
 
   const setCommentText = e => {
@@ -29,14 +29,7 @@ const CreateComment = ({ classes }) => {
         pinId: state.currentPin._id,
         text: comment
       }
-      const { createComment } = await client.request(
-        CREATE_COMMENT_MUTATION,
-        variables
-      )
-      dispatch({
-        type: 'CREATE_COMMENT',
-        payload: createComment
-      })
+      await client.request(CREATE_COMMENT_MUTATION, variables)
       setComment('')
     } catch (err) {
       console.error('Create comment error', err.message)
